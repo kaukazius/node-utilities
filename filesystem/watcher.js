@@ -11,13 +11,18 @@ if (!filename) {
 
 fs.watch(filename, function() {
   let
+    // creating a child process and assigning it to a variable called ls
     ls = spawn('ls', ['-lh', filename]),
+    // for output coming from the child process.
     output = '';
+  // adds a listener for for data events
   ls.stdout.on('data', function(chunk){
+    // convert the buffer’s contents to a string and append to output
     output += chunk.toString();
   });
-
+  // adds a listener for for close events
   ls.on('close', function(){
+    // splitting output on sequences of one or more whitespace characters
     let parts = output.split(/\s+/);
     console.dir([parts[0], parts[4], parts[8]]);
   });
